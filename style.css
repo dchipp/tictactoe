@@ -1,0 +1,72 @@
+:root{
+    --bgColor: rgb(30,30,30);
+    --circleColor: rgb(70, 70, 255);
+    --crossColor: rgb(255, 55, 55)
+}
+body{
+    background-color: var(--bgColor);
+    margin: 0px;
+    padding: 0px;
+}
+.mainContainer{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tttContainer{
+    height: 390px;
+    width: 390px;
+    display: grid;
+    grid-template-columns: 140px 5px 140px 5px 140px;
+    grid-template-rows: 140px 5px 140px 5px 140px;
+}
+.cell{
+    background-color: var(--bgColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.empty{
+    background-color: white;
+}
+.line1{
+    grid-column-start: 1;
+    grid-column-end: 6;
+}
+.line2{
+    grid-column-start: 1;
+    grid-column-end: 6;
+}
+.circle{
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin: 0px;
+    border: 10px solid var(--circleColor);
+    animation-name: example;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+.figure{
+    height: 90%;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+}
+@keyframes example {
+    from {
+        border-radius: 0%;
+        height: 40%;
+        width: 40%;
+     }
+    to {
+        border-radius: 50%;
+        height: 80%;
+        width: 80%;
+    }
+}
