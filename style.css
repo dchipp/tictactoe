@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Roboto&display=swap');
+
 :root{
     --bgColor: rgb(30,30,30);
-    --circleColor: rgb(70, 70, 255);
+    --circleColor: rgb(44, 101, 223);
     --crossColor: rgb(255, 55, 55)
 }
 body{
@@ -9,6 +11,7 @@ body{
     padding: 0px;
 }
 .mainContainer{
+    position: relative;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -16,6 +19,7 @@ body{
     align-items: center;
 }
 .tttContainer{
+    position: relative;
     height: 390px;
     width: 390px;
     display: grid;
@@ -23,6 +27,7 @@ body{
     grid-template-rows: 140px 5px 140px 5px 140px;
 }
 .cell{
+    transition: 0.5s;
     background-color: var(--bgColor);
     display: flex;
     justify-content: center;
@@ -45,11 +50,11 @@ body{
     -webkit-box-sizing: border-box;
     margin: 0px;
     border: 10px solid var(--circleColor);
-    animation-name: example;
+    animation-name: circle;
     animation-duration: 0.2s;
     animation-fill-mode: forwards;
 }
-.figure{
+.circleFigure{
     height: 90%;
     width: 90%;
     display: flex;
@@ -58,7 +63,118 @@ body{
     overflow: hidden;
 
 }
-@keyframes example {
+.crossFigure{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.segment{
+    position: absolute;
+    width: 90%;
+    height: 7%;
+    background-color: var(--crossColor);
+    animation-name: cross;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+.one{
+    transform: rotate(45deg);
+}
+.two{
+    transform: rotate(-45deg);
+}
+/* VICTORY RELATED STUFF*/
+.hide{
+    opacity: 50%;
+}
+.row{
+    position: absolute;
+    width: 110%;
+    height: 3%;
+    border: 1px solid black;
+    animation-name: line;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+}
+.row-top{
+    top: 16.4%;
+}
+.row-mid{
+    top: 53.5%;
+}
+.row-bot{
+    top: 90.6%;
+}
+.column{
+    position: absolute;
+    border: 1px solid black;
+    width: 3.5%;
+    height: 105%;
+    margin-left: 16%;
+    top:2%;
+    animation-name: verticalLine;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+}
+.column-mid{
+    margin-left: 53.2%;
+}
+.column-right{
+    margin-left: 90.5%;
+}
+.diag-dec{
+    position: absolute;
+    width: 150%; 
+    margin-left: 5%;
+    height: 3%;
+    top: 90.6%;
+    border: 1px solid black;
+    transform: rotate(45deg) translateY(-250%) translateX(-30%);
+    background-color: red;
+}
+.diag-inc{
+    position: absolute;
+    width: 150%; 
+    margin-left: 5%;
+    height: 3%;
+    top: 90.6%;
+    border: 1px solid black;
+    transform: rotate(-45deg) translateY(-1260%) translateX(6%);
+    background-color: red;
+}
+
+.winnerContainer{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    color: transparent;
+    font-family: 'Bakbak One', cursive;
+    top: 15%;
+    font-size: 400%;
+    transition: 0.5s;
+}
+@keyframes line {
+    from {
+        width: 0%;
+     }
+    to {
+        width: 110%;
+    }
+}
+@keyframes verticalLine {
+    from {
+        height: 0%;
+     }
+    to {
+        height: 105%;
+    }
+}
+@keyframes circle {
     from {
         border-radius: 0%;
         height: 40%;
@@ -68,5 +184,15 @@ body{
         border-radius: 50%;
         height: 80%;
         width: 80%;
+    }
+}
+@keyframes cross {
+    from {
+        height: 10%;
+        width: 10%;
+     }
+    to {
+        height: 7%;
+        width: 90%;
     }
 }
