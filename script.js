@@ -2,14 +2,19 @@ let turn = 0;
 let playing = true;
 let playArea = document.getElementById("playArea");
 let winnerTitle = document.getElementById("winnerContainer");
+let restartText = document.getElementById("restartText");
 winnerTitle.innerText="";
+restartText.innerText="";
 let circleColor = "#2c65df";
 let crossColor = "#ff3737";
-function play(element){
+let restarting = false;
+let bot = true;
+let botTurn = false;
 
+function play(element){
     if(element.classList.contains("taken"))return;
     if(!playing)return;
-
+    
     if(turn==0){
         let circleFigureDiv = document.createElement("div");
         let circleDiv = document.createElement("div");
@@ -42,44 +47,67 @@ function play(element){
         turn=0;
         checkWin();
     }
-
+    if(bot&&!botTurn){
+        botTurn=true;
+        botMove();
+    }
     element.classList.add("taken");
 }
 
+function botMove(){
+    if(!playing)return;
+        let cells = Array.from(document.querySelectorAll(".figure"))
+        let chosen = Math.floor(Math.random()*9)
+        if(cells[chosen].classList.contains("taken")){
+         console.log("retrying");
+            return botMove();
+        }
+        play(cells[chosen]);
+        botTurn=false;
+    
+}
+
 function checkWin(){
-    console.log("checking win");
     let cells = Array.from(document.querySelectorAll(".figure"))
     if(checkLine(cells, 0,1,2)){
         win("row-top");
         hide(cells, 0,1,2);
+        return;
     }
     if(checkLine(cells, 0,3,6)){
         win("column-left");
         hide(cells, 0,3,6);
+        return;
     }
     if(checkLine(cells, 0,4,8)){
         win("diag-dec");
         hide(cells, 0,4,8);
+        return;
     }
     if(checkLine(cells, 2,4,6)){
         win("diag-inc");
         hide(cells, 2,4,6);
+        return;
     }
     if(checkLine(cells, 3,4,5)){
         win("row-mid");
         hide(cells, 3,4,5);
+        return;
     }
     if(checkLine(cells, 1,4,7)){
         win("column-mid");
         hide(cells, 1,4,7);
+        return;
     }
     if(checkLine(cells, 2,5,8)){
         win("column-right");
         hide(cells, 2,5,8);
+        return;
     }
     if(checkLine(cells, 6,7,8)){
         win("row-bot");
         hide(cells, 6,7,8);
+        return;
     }
 }
 
@@ -94,19 +122,25 @@ function checkLine(cells, a, b, c){
 }
 
 function win(type){
-    playing=false;
-    console.log("won")
     let line = document.createElement("div");
     line.classList.add("figure");
+    line.id="line";
     playArea.append(line);
     if(turn==0){
         line.style.backgroundColor=crossColor;
         winnerTitle.style.color=crossColor;
+        restartText.style.color=crossColor;
         winnerTitle.innerText="Cross wins!"
     } else {
         line.style.backgroundColor=circleColor;
         winnerTitle.style.color=circleColor;
+        restartText.style.color=circleColor;
         winnerTitle.innerText="Circle wins!"
+    }
+    if(window.innerWidth<600){
+        restartText.innerText="Tap anywhere to restart"
+    } else {
+        restartText.innerText="Click anywhere to restart"
     }
     switch(type){
         case type="row-top":
@@ -141,13 +175,40 @@ function win(type){
             break;
     }
 
+    playing=false;
 }
 
 function hide(cells,a,b,c){
     cells.forEach((x,i) =>{
-        console.log(i)
         if(i!=a&&i!=b&&i!=c){
             x.style.opacity="20%";
         }
     })
 }
+document.body.addEventListener('click', restart);
+function restart(){
+    if(playing)return;
+    if(!restarting)return restarting=true;
+    if(bot)botTurn=false;
+    document.getElementById("line").remove();
+    winnerTitle.innerText="";
+    winnerTitle.style.color="transparent";
+    restartText.innerText="";
+    restartText.style.color="transparent";
+    let cells = Array.from(document.querySelectorAll(".figure"))
+    cells.forEach(x=>{
+        let delChild = x.lastChild;
+        x.classList.remove("hasCircle");
+        x.classList.remove("taken");
+        x.classList.remove("hasCross");
+        x.style.opacity="100%"
+        while (delChild) {
+            x.removeChild(delChild);
+            delChild = x.lastChild;
+        }
+    })
+    restarting=false;
+    playing=true;
+    turn=0;
+    
+} 
