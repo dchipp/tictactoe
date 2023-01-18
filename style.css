@@ -18,13 +18,15 @@ body{
     justify-content: center;
     align-items: center;
 }
+
 .tttContainer{
     position: relative;
     height: 390px;
     width: 390px;
     display: grid;
-    grid-template-columns: 140px 5px 140px 5px 140px;
-    grid-template-rows: 140px 5px 140px 5px 140px;
+    grid-template-columns: 35.89% 1.28% 35.89% 1.28% 35.89%;
+    grid-template-rows: 35.89% 1.28% 35.89% 1.28% 35.89%;
+    transition: 0.2s;
 }
 .cell{
     transition: 0.5s;
@@ -158,6 +160,35 @@ body{
     font-size: 400%;
     transition: 0.5s;
 }
+.restartText{
+    position: absolute;
+    bottom:20%;
+    margin-left: 3%;
+    font-family: 'Bakbak One', cursive;
+    transition: 0.2s;
+    color: transparent;
+}
+@media only screen and (max-width: 600px) {
+    .tttContainer{
+        height: 200px;
+        width: 200px;
+    }
+    .winnerContainer{
+        font-size: 200%;
+        top: 30%;
+    }
+    .restartText{
+        
+        font-size: 75%;
+        bottom: 32%;
+    }
+    .diag-dec{
+        transform: rotate(45deg) translateY(-220%) translateX(-30%);
+    }
+    .diag-inc{
+        transform: rotate(-45deg) translateY(-1100%) translateX(6%);
+    }
+  }
 @keyframes line {
     from {
         width: 0%;
