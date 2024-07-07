@@ -47,11 +47,13 @@ function play(element){
         turn=0;
         checkWin();
     }
+    
+    element.classList.add("taken");
+    
     if(bot&&!botTurn){
         botTurn=true;
         botMove();
     }
-    element.classList.add("taken");
 }
 
 function botMove(){
