@@ -7,6 +7,7 @@ winnerTitle.innerText="";
 restartText.innerText="";
 let circleColor = "#2c65df";
 let crossColor = "#ff3737";
+let drawColor = "#f57c36"
 let restarting = false;
 let bot = true;
 let botTurn = false;
@@ -62,7 +63,16 @@ function botMove(){
         let chosen = Math.floor(Math.random()*9)
         if(cells[chosen].classList.contains("taken")){
          console.log("retrying");
+         try{
             return botMove();
+         } catch (e){
+            if(e instanceof RangeError){
+                botTurn=false;
+                console.log("Stack overflow")
+                hideFull(cells);
+                win("draw");
+            }
+         }
         } else {
             play(cells[chosen]);
             botTurn=false;
@@ -73,6 +83,15 @@ function botMove(){
 
 function checkWin(){
     let cells = Array.from(document.querySelectorAll(".figure"))
+
+    let full = true;
+    cells.forEach(cell => {
+        if(!cell.classList.contains("taken")){
+            full = false;
+            return;
+        }
+    })
+
     if(checkLine(cells, 0,1,2)){
         win("row-top");
         hide(cells, 0,1,2);
@@ -113,6 +132,9 @@ function checkWin(){
         hide(cells, 6,7,8);
         return;
     }
+    if(full){
+        return win("draw");
+    }
 }
 
 function checkLine(cells, a, b, c){
@@ -126,60 +148,65 @@ function checkLine(cells, a, b, c){
 }
 
 function win(type){
+    playing=false;
     let line = document.createElement("div");
     line.classList.add("figure");
     line.id="line";
     playArea.append(line);
-    if(turn==0){
-        line.style.backgroundColor=crossColor;
-        winnerTitle.style.color=crossColor;
-        restartText.style.color=crossColor;
-        winnerTitle.innerText="Cross wins!"
+    if(type=="draw"){
+        winnerTitle.style.color=drawColor;
+        restartText.style.color=drawColor;
+        winnerTitle.innerText="It's a draw!"
     } else {
-        line.style.backgroundColor=circleColor;
-        winnerTitle.style.color=circleColor;
-        restartText.style.color=circleColor;
-        winnerTitle.innerText="Circle wins!"
+        if(turn==0){
+            line.style.backgroundColor=crossColor;
+            winnerTitle.style.color=crossColor;
+            restartText.style.color=crossColor;
+            winnerTitle.innerText="Cross wins!"
+        } else {
+            line.style.backgroundColor=circleColor;
+            winnerTitle.style.color=circleColor;
+            restartText.style.color=circleColor;
+            winnerTitle.innerText="Circle wins!"
+        }
+        switch(type){
+            case type="row-top":
+                line.classList.add("row");
+                line.classList.add("row-top");
+                break;
+            case type="row-mid":
+                line.classList.add("row");
+                line.classList.add("row-mid");
+                break;
+            case type="row-bot":
+                line.classList.add("row");
+                line.classList.add("row-bot");
+                break;
+            case type="column-left":
+                line.classList.add("column");
+                line.classList.add("column-left");
+                break;
+            case type="column-mid":
+                line.classList.add("column");
+                line.classList.add("column-mid");
+                break;
+            case type="column-right":
+                line.classList.add("column");
+                line.classList.add("column-right");
+                break;
+            case type="diag-dec":
+                line.classList.add("diag-dec");
+                break;
+            case type="diag-inc":
+                line.classList.add("diag-inc");
+                break;
+        }
     }
     if(window.innerWidth<600){
         restartText.innerText="Tap anywhere to restart"
     } else {
         restartText.innerText="Click anywhere to restart"
     }
-    switch(type){
-        case type="row-top":
-            line.classList.add("row");
-            line.classList.add("row-top");
-            break;
-        case type="row-mid":
-            line.classList.add("row");
-            line.classList.add("row-mid");
-            break;
-        case type="row-bot":
-            line.classList.add("row");
-            line.classList.add("row-bot");
-            break;
-        case type="column-left":
-            line.classList.add("column");
-            line.classList.add("column-left");
-            break;
-        case type="column-mid":
-            line.classList.add("column");
-            line.classList.add("column-mid");
-            break;
-        case type="column-right":
-            line.classList.add("column");
-            line.classList.add("column-right");
-            break;
-        case type="diag-dec":
-            line.classList.add("diag-dec");
-            break;
-        case type="diag-inc":
-            line.classList.add("diag-inc");
-            break;
-    }
-
-    playing=false;
 }
 
 function hide(cells,a,b,c){
@@ -187,6 +214,11 @@ function hide(cells,a,b,c){
         if(i!=a&&i!=b&&i!=c){
             x.style.opacity="20%";
         }
+    })
+}
+function hideFull(cells){
+    cells.forEach(x => {
+         x.style.opacity="20%";
     })
 }
 document.body.addEventListener('click', restart);
