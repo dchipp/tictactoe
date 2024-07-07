@@ -63,9 +63,11 @@ function botMove(){
         if(cells[chosen].classList.contains("taken")){
          console.log("retrying");
             return botMove();
+        } else {
+            play(cells[chosen]);
+            botTurn=false;
         }
-        play(cells[chosen]);
-        botTurn=false;
+        
     
 }
 
